@@ -6,8 +6,54 @@ The repository contains exactly two primary applications:
 
 ```text
 YOU/
+├── package.json
 ├── mobile/   # React Native + TypeScript app
 └── backend/  # Node.js + Express + MongoDB API
+```
+
+## Prerequisites
+
+Install these before running the project:
+
+- Node.js 20 LTS or newer
+- npm 10 or newer
+- MongoDB running locally, or a MongoDB Atlas connection string
+- Expo/React Native development tooling for mobile builds
+- Android Studio for Android emulator builds
+- Xcode for iOS builds on macOS
+
+Check your local versions:
+
+```bash
+node --version
+npm --version
+```
+
+## Monorepo Setup
+
+Install workspace dependencies from the repository root:
+
+```bash
+npm install
+```
+
+Run formatting or linting across both apps:
+
+```bash
+npm run format
+npm run lint
+```
+
+You can also work inside each app directly:
+
+```bash
+cd backend
+npm run dev
+```
+
+```bash
+cd mobile
+npm run start
 ```
 
 ## Product Scope
@@ -155,6 +201,31 @@ Current route groups:
 | `/api/v1/ai` | AI orchestration |
 | `/api/v1/notifications` | Notifications |
 
+## API Endpoint Map
+
+The scaffold includes these initial endpoints:
+
+| Method | Endpoint | Auth | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/api/v1/health` | No | API health check |
+| `POST` | `/api/v1/auth/register` | No | Create user and return JWT |
+| `POST` | `/api/v1/auth/login` | No | Login and return JWT |
+| `GET` | `/api/v1/users/me` | Yes | Get current user |
+| `PATCH` | `/api/v1/users/me` | Yes | Update current user |
+| `GET` | `/api/v1/onboarding/identity` | Yes | Get identity onboarding data |
+| `PUT` | `/api/v1/onboarding/identity` | Yes | Create or update identity onboarding |
+| `GET` | `/api/v1/roadmaps` | Yes | List user roadmaps |
+| `POST` | `/api/v1/roadmaps` | Yes | Create a roadmap |
+| `GET` | `/api/v1/journey` | Yes | List journey feed entries |
+| `POST` | `/api/v1/journey` | Yes | Create journey feed entry |
+| `GET` | `/api/v1/journals` | Yes | List journal entries |
+| `POST` | `/api/v1/journals` | Yes | Create journal entry |
+| `GET` | `/api/v1/cards` | Yes | List YOU cards |
+| `POST` | `/api/v1/cards` | Yes | Create YOU card |
+| `POST` | `/api/v1/ai/generate` | Yes | Generate AI roadmap, journal, or card output |
+| `GET` | `/api/v1/notifications` | Yes | List notifications |
+| `POST` | `/api/v1/notifications` | Yes | Create notification |
+
 ## Backend Module Contract
 
 Every standard backend feature module follows this shape:
@@ -269,6 +340,13 @@ Authorization: Bearer <token>
 
 ## Scripts
 
+Root workspace:
+
+```bash
+npm run lint     # lint backend and mobile
+npm run format   # format backend and mobile
+```
+
 Backend:
 
 ```bash
@@ -292,13 +370,61 @@ npm run format
 
 ## Development Workflow
 
-1. Create or update a feature in `backend/src/modules/<feature>`.
-2. Keep HTTP request/response mapping in the controller.
+1. Create or update a backend feature in `backend/src/modules/<feature>`.
+2. Keep HTTP request and response mapping in the controller.
 3. Put business rules in the service.
 4. Put persistence rules in the model.
 5. Keep validation close to the module.
-6. Add mobile API calls in `mobile/src/services`.
-7. Add screens under the matching feature folder in `mobile/src/screens`.
+6. Register routes in `backend/src/app.js` under `/api/v1`.
+7. Add mobile API calls in `mobile/src/services`.
+8. Add screens under the matching feature folder in `mobile/src/screens`.
+9. Add shared mobile UI in `mobile/src/components`.
+
+## Adding A Backend Module
+
+Use the same five-file contract for normal modules:
+
+```text
+feature/
+├── feature.controller.js
+├── feature.service.js
+├── feature.routes.js
+├── feature.model.js
+└── feature.validator.js
+```
+
+Then mount it in `backend/src/app.js`:
+
+```js
+const featureRoutes = require('./modules/feature/feature.routes');
+
+apiV1.use('/features', featureRoutes);
+```
+
+## Adding A Mobile Screen
+
+Place feature screens in `mobile/src/screens/<feature>`, then register them in the root navigator:
+
+```tsx
+<Stack.Screen name="Feature" component={FeatureScreen} />
+```
+
+Keep API calls in `mobile/src/services` so screens stay focused on rendering and interactions.
+
+## Verification Checklist
+
+Before opening a pull request or handing the app to another developer:
+
+```bash
+npm run format
+npm run lint
+```
+
+For backend syntax-only verification without installing dependencies:
+
+```bash
+find backend/src -name '*.js' -print0 | xargs -0 -n 1 node --check
+```
 
 ## Production Notes
 
@@ -315,6 +441,8 @@ npm run format
 ```text
 YOU/
 ├── README.md
+├── package.json
+├── .gitignore
 ├── .eslintrc.cjs
 ├── .prettierrc
 ├── backend/
@@ -332,7 +460,10 @@ YOU/
 └── mobile/
     ├── README.md
     ├── App.tsx
+    ├── app.json
+    ├── index.js
     ├── package.json
+    ├── tsconfig.json
     └── src/
         ├── assets/
         ├── components/
@@ -346,6 +477,4 @@ YOU/
         ├── constants/
         ├── theme/
         └── types/
-        └── utils/
 ```
-
