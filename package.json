@@ -1,0 +1,14 @@
+{
+  "name": "you",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "mobile",
+    "backend"
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspace backend && npm run lint --workspace mobile",
+    "format": "npm run format --workspace backend && npm run format --workspace mobile"
+  }
+}
+

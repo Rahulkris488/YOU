@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "YOU",
+    "slug": "you",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "you",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "extra": {
+      "apiBaseUrl": "http://localhost:4000"
+    }
+  }
+}
+
