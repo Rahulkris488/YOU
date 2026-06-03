@@ -1,15 +1,40 @@
 # YOU
 
-YOU is a production-ready monorepo blueprint for a personal identity, journey, roadmap, journaling, and card-based progression app.
+YOU is a monorepo for a personal growth app built around identity onboarding, a roadmap called the YOUmap, progression, journaling, journey tracking, and collectible YOU Cards.
 
-The repository contains exactly two primary applications:
+The repository has two primary applications:
 
 ```text
 YOU/
-├── package.json
 ├── mobile/   # React Native + TypeScript app
 └── backend/  # Node.js + Express + MongoDB API
 ```
+
+## What This Repo Contains
+
+- React Native mobile app written in TypeScript
+- Node.js and Express backend
+- MongoDB models with Mongoose
+- JWT authentication
+- Feature-based backend modules
+- API versioning under `/api/v1`
+- AI module with prompts separated from controllers
+- ESLint and Prettier configuration
+- Developer-focused setup and architecture notes
+
+## MVP Features
+
+| Feature | Backend Area | Mobile Area |
+| --- | --- | --- |
+| Authentication | `backend/src/modules/auth` | `mobile/src/screens/auth` |
+| Identity Onboarding | `backend/src/modules/onboarding` | `mobile/src/screens/onboarding` |
+| Driver Cards | `backend/src/modules/cards` | `mobile/src/screens/cards` |
+| YOUmap | `backend/src/modules/roadmap` | `mobile/src/screens/roadmap` |
+| Progression System | `backend/src/modules/user` | `mobile/src/store` |
+| Daily Streak | `backend/src/modules/journey` | `mobile/src/screens/home` |
+| Journey Feed | `backend/src/modules/journey` | `mobile/src/screens/journey` |
+| AI Journal | `backend/src/modules/journal`, `backend/src/modules/ai` | `mobile/src/screens/journal` |
+| YOU Cards | `backend/src/modules/cards` | `mobile/src/screens/cards` |
 
 ## Prerequisites
 
@@ -17,104 +42,207 @@ Install these before running the project:
 
 - Node.js 20 LTS or newer
 - npm 10 or newer
-- MongoDB running locally, or a MongoDB Atlas connection string
-- Expo/React Native development tooling for mobile builds
+- MongoDB locally or a MongoDB Atlas database
+- Expo and React Native development tooling
 - Android Studio for Android emulator builds
 - Xcode for iOS builds on macOS
 
-Check your local versions:
+Check your local runtime:
 
 ```bash
 node --version
 npm --version
 ```
 
-## Monorepo Setup
+## First-Time Setup
 
-Install workspace dependencies from the repository root:
+Install dependencies from the repo root:
 
 ```bash
 npm install
 ```
 
-Run formatting or linting across both apps:
-
-```bash
-npm run format
-npm run lint
-```
-
-You can also work inside each app directly:
+Create the backend environment file:
 
 ```bash
 cd backend
+cp .env.example .env
+```
+
+Update `backend/.env` with your MongoDB URI and JWT secret.
+
+Start the backend:
+
+```bash
 npm run dev
 ```
+
+Start the mobile app in another terminal:
 
 ```bash
 cd mobile
 npm run start
 ```
 
-## Product Scope
+Run a platform build:
 
-The MVP is built around nine core features:
+```bash
+npm run android
+npm run ios
+```
 
-| Feature | Description | App Area |
-| --- | --- | --- |
-| Authentication | Register, login, JWT-protected sessions | `backend/src/modules/auth`, `mobile/src/screens/auth` |
-| Identity Onboarding | Capture who the user is becoming, their goal, and main driver | `onboarding` |
-| Driver Cards | Motivational cards tied to the user's identity and progress | `cards` |
-| YOUmap | Roadmap levels and tasks for the user's personal path | `roadmap` |
-| Progression System | Level and XP tracking | `user`, `roadmap`, `cards` |
-| Daily Streak | Habit and journey continuity tracking | `journey`, future streak service |
-| Journey Feed | Timeline of progress events and reflections | `journey` |
-| AI Journal | User journal text transformed into AI-supported insight | `journal`, `ai` |
-| YOU Cards | Collectible identity/progression cards | `cards` |
+## Environment
 
-## Architecture Overview
+Backend variables are documented in `backend/.env.example`.
 
-The backend uses feature-based architecture. Each domain module owns its routes, controller, service, model, and validator. Shared infrastructure lives outside modules.
+| Variable | Required | Example | Purpose |
+| --- | --- | --- | --- |
+| `NODE_ENV` | Yes | `development` | Runtime mode |
+| `PORT` | Yes | `5000` | Backend port |
+| `MONGODB_URI` | Yes | `mongodb://127.0.0.1:27017/you` | MongoDB connection |
+| `JWT_SECRET` | Yes | `replace-with-a-long-random-secret` | JWT signing secret |
+| `JWT_EXPIRES_IN` | Yes | `7d` | Token lifetime |
+| `CORS_ORIGIN` | Yes | `http://localhost:8081` | Allowed client origin |
+| `OPENAI_API_KEY` | No | empty | OpenAI provider key |
+| `CLAUDE_API_KEY` | No | empty | Claude provider key |
+| `GEMINI_API_KEY` | No | empty | Gemini provider key |
+
+Mobile API configuration lives in `mobile/src/constants/env.ts`.
+
+```ts
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:5000';
+```
+
+For Android emulators, use your machine host instead of mobile localhost:
+
+```bash
+EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:5000 npm run start
+```
+
+## Scripts
+
+Root workspace:
+
+```bash
+npm run lint
+npm run format
+```
+
+Backend:
+
+```bash
+cd backend
+npm run dev      # start API with nodemon
+npm start        # start API with node
+npm run lint     # lint backend source
+npm run format   # format backend source
+```
+
+Mobile:
+
+```bash
+cd mobile
+npm run start    # start Expo
+npm run android  # run Android build
+npm run ios      # run iOS build
+npm run lint     # lint mobile source
+npm run format   # format mobile source
+```
+
+## Backend Architecture
+
+The backend uses feature-based architecture. Shared infrastructure lives in `config`, `middleware`, `utils`, and `validators`. Product behavior lives in `modules`.
 
 ```text
 backend/src/
-├── config/       # environment and database setup
-├── middleware/   # auth, errors, not-found handling
-├── modules/      # feature modules
-├── utils/        # shared helpers
-├── validators/   # shared validation helpers
-├── app.js        # Express app composition
-└── server.js     # process bootstrap
+├── config/
+├── middleware/
+├── modules/
+├── utils/
+├── validators/
+├── app.js
+└── server.js
 ```
 
-The mobile app uses a common React Native feature layout:
+Every standard module follows this shape:
+
+```text
+module-name/
+├── module.controller.js
+├── module.service.js
+├── module.routes.js
+├── module.model.js
+└── module.validator.js
+```
+
+Responsibilities:
+
+- `*.routes.js` defines route paths and middleware.
+- `*.controller.js` maps HTTP input and output.
+- `*.service.js` owns business logic.
+- `*.model.js` owns MongoDB schema and persistence.
+- `*.validator.js` owns request validation schemas.
+
+## AI Architecture
+
+Prompts are not stored in controllers. The AI module separates prompts, provider adapters, and orchestration:
+
+```text
+backend/src/modules/ai/
+├── prompts/
+│   ├── roadmap.prompt.js
+│   ├── journal.prompt.js
+│   └── card.prompt.js
+├── providers/
+│   ├── openai.js
+│   ├── claude.js
+│   └── gemini.js
+└── ai.service.js
+```
+
+Flow:
+
+1. Route receives `POST /api/v1/ai/generate`.
+2. Controller validates and forwards input.
+3. `ai.service.js` selects the prompt builder.
+4. `ai.service.js` selects the provider adapter.
+5. The AI request and output are stored through `ai.model.js`.
+
+## Mobile Architecture
+
+The mobile app is organized by reusable app layers and feature screens:
 
 ```text
 mobile/src/
 ├── assets/
 ├── components/
-├── screens/
-├── navigation/
-├── services/
-├── hooks/
-├── context/
-├── store/
-├── utils/
 ├── constants/
+├── context/
+├── hooks/
+├── navigation/
+├── screens/
+├── services/
+├── store/
 ├── theme/
-└── types/
+├── types/
+└── utils/
 ```
 
-## Backend Quick Start
+Responsibilities:
 
-```bash
-cd backend
-npm install
-cp .env.example .env
-npm run dev
-```
+- `screens` contains user-facing feature screens.
+- `components` contains shared UI.
+- `navigation` contains route types and navigators.
+- `services` contains API clients.
+- `context` contains React context providers.
+- `store` is prepared for shared client state.
+- `theme` contains colors, spacing, and design constants.
+- `types` contains shared TypeScript types.
+- `utils` contains pure helpers.
 
-The API defaults to:
+## API Base URL
+
+Backend base URL:
 
 ```text
 http://localhost:5000/api/v1
@@ -136,137 +264,44 @@ Expected response:
 }
 ```
 
-## Mobile Quick Start
-
-```bash
-cd mobile
-npm install
-npm run start
-```
-
-Then run the platform target:
-
-```bash
-npm run android
-npm run ios
-```
-
-Set `API_BASE_URL` in the mobile environment strategy you choose for your React Native runtime. The default API URL in the placeholder service is:
-
-```text
-http://localhost:5000/api/v1
-```
-
-For Android emulators, `localhost` usually needs to become:
-
-```text
-http://10.0.2.2:5000/api/v1
-```
-
-## Environment Variables
-
-Backend variables live in [backend/.env.example](/home/rahul/projects/YOU/backend/.env.example).
-
-| Variable | Required | Description |
-| --- | --- | --- |
-| `NODE_ENV` | Yes | `development`, `test`, or `production` |
-| `PORT` | Yes | API server port |
-| `MONGODB_URI` | Yes | MongoDB connection string |
-| `JWT_SECRET` | Yes | Secret used to sign JWT access tokens |
-| `JWT_EXPIRES_IN` | Yes | Token lifetime, for example `7d` |
-| `CORS_ORIGIN` | Yes | Allowed frontend origin |
-| `OPENAI_API_KEY` | No | AI provider credential |
-| `CLAUDE_API_KEY` | No | AI provider credential |
-| `GEMINI_API_KEY` | No | AI provider credential |
-
-## API Versioning
-
-All backend routes are mounted under:
-
-```text
-/api/v1
-```
-
-Current route groups:
-
-| Route | Module |
-| --- | --- |
-| `/api/v1/auth` | Authentication |
-| `/api/v1/users` | User profile/progression |
-| `/api/v1/onboarding` | Identity onboarding |
-| `/api/v1/roadmaps` | YOUmap |
-| `/api/v1/journey` | Journey feed |
-| `/api/v1/journals` | AI journal entries |
-| `/api/v1/cards` | YOU cards |
-| `/api/v1/ai` | AI orchestration |
-| `/api/v1/notifications` | Notifications |
-
-## API Endpoint Map
-
-The scaffold includes these initial endpoints:
+## API Endpoints
 
 | Method | Endpoint | Auth | Purpose |
 | --- | --- | --- | --- |
-| `GET` | `/api/v1/health` | No | API health check |
-| `POST` | `/api/v1/auth/register` | No | Create user and return JWT |
-| `POST` | `/api/v1/auth/login` | No | Login and return JWT |
-| `GET` | `/api/v1/users/me` | Yes | Get current user |
-| `PATCH` | `/api/v1/users/me` | Yes | Update current user |
-| `GET` | `/api/v1/onboarding/identity` | Yes | Get identity onboarding data |
-| `PUT` | `/api/v1/onboarding/identity` | Yes | Create or update identity onboarding |
-| `GET` | `/api/v1/roadmaps` | Yes | List user roadmaps |
-| `POST` | `/api/v1/roadmaps` | Yes | Create a roadmap |
+| `GET` | `/api/v1/health` | No | Health check |
+| `POST` | `/api/v1/auth/register` | No | Register a user |
+| `POST` | `/api/v1/auth/login` | No | Login a user |
+| `GET` | `/api/v1/users/me` | Yes | Get current profile |
+| `PATCH` | `/api/v1/users/me` | Yes | Update current profile |
+| `GET` | `/api/v1/onboarding/identity` | Yes | Get identity onboarding |
+| `PUT` | `/api/v1/onboarding/identity` | Yes | Save identity onboarding |
+| `GET` | `/api/v1/roadmaps` | Yes | List roadmaps |
+| `POST` | `/api/v1/roadmaps` | Yes | Create roadmap |
 | `GET` | `/api/v1/journey` | Yes | List journey feed entries |
 | `POST` | `/api/v1/journey` | Yes | Create journey feed entry |
-| `GET` | `/api/v1/journals` | Yes | List journal entries |
-| `POST` | `/api/v1/journals` | Yes | Create journal entry |
+| `GET` | `/api/v1/journals` | Yes | List journals |
+| `POST` | `/api/v1/journals` | Yes | Create journal |
 | `GET` | `/api/v1/cards` | Yes | List YOU cards |
 | `POST` | `/api/v1/cards` | Yes | Create YOU card |
-| `POST` | `/api/v1/ai/generate` | Yes | Generate AI roadmap, journal, or card output |
+| `POST` | `/api/v1/ai/generate` | Yes | Generate AI output |
 | `GET` | `/api/v1/notifications` | Yes | List notifications |
 | `POST` | `/api/v1/notifications` | Yes | Create notification |
 
-## Backend Module Contract
-
-Every standard backend feature module follows this shape:
-
-```text
-module-name/
-├── module.controller.js
-├── module.service.js
-├── module.routes.js
-├── module.model.js
-└── module.validator.js
-```
-
-Controllers handle HTTP concerns, services handle business logic, models handle MongoDB persistence, and validators define input rules. Prompts are intentionally kept out of controllers.
-
-## AI Module Contract
-
-AI logic is separated by responsibility:
-
-```text
-backend/src/modules/ai/
-├── prompts/       # prompt builders
-├── providers/     # provider clients
-└── ai.service.js  # provider orchestration
-```
-
-Provider files are thin wrappers. `ai.service.js` decides which provider method to call, while prompts stay in `prompts/`.
-
-## Authentication Flow
-
-1. User registers through `POST /api/v1/auth/register`.
-2. Password is hashed with bcrypt before storage.
-3. Backend returns a JWT and user profile.
-4. Mobile stores the token using the app's secure storage strategy.
-5. Protected API calls send:
+Protected routes require:
 
 ```text
 Authorization: Bearer <token>
 ```
 
-6. `authenticate` middleware verifies the token and loads `req.user`.
+## Authentication Flow
+
+1. Mobile calls `POST /api/v1/auth/register` or `POST /api/v1/auth/login`.
+2. Backend validates the request body with Zod.
+3. Passwords are hashed with bcrypt before storage.
+4. Backend signs a JWT with `JWT_SECRET`.
+5. Mobile stores the token using a secure storage strategy.
+6. Mobile sends the token in the `Authorization` header for protected calls.
+7. Backend middleware verifies the token and loads `req.user`.
 
 ## Database Models
 
@@ -281,6 +316,8 @@ Authorization: Bearer <token>
   xp
 }
 ```
+
+The implementation also stores `passwordHash` for authentication.
 
 ### Identity
 
@@ -338,105 +375,91 @@ Authorization: Bearer <token>
 }
 ```
 
-## Scripts
-
-Root workspace:
-
-```bash
-npm run lint     # lint backend and mobile
-npm run format   # format backend and mobile
-```
-
-Backend:
-
-```bash
-cd backend
-npm run dev      # start with nodemon
-npm start        # start production server
-npm run lint     # run ESLint
-npm run format   # run Prettier
-```
-
-Mobile:
-
-```bash
-cd mobile
-npm run start
-npm run android
-npm run ios
-npm run lint
-npm run format
-```
-
 ## Development Workflow
 
-1. Create or update a backend feature in `backend/src/modules/<feature>`.
-2. Keep HTTP request and response mapping in the controller.
-3. Put business rules in the service.
-4. Put persistence rules in the model.
-5. Keep validation close to the module.
-6. Register routes in `backend/src/app.js` under `/api/v1`.
+1. Add backend behavior inside `backend/src/modules/<feature>`.
+2. Keep HTTP mapping in the controller.
+3. Keep business rules in the service.
+4. Keep MongoDB persistence in the model.
+5. Keep input validation in the validator.
+6. Register routes in `backend/src/app.js`.
 7. Add mobile API calls in `mobile/src/services`.
-8. Add screens under the matching feature folder in `mobile/src/screens`.
-9. Add shared mobile UI in `mobile/src/components`.
+8. Add mobile screens in `mobile/src/screens/<feature>`.
+9. Add shared UI in `mobile/src/components`.
+10. Run syntax, lint, and format checks before handoff.
 
 ## Adding A Backend Module
 
-Use the same five-file contract for normal modules:
+Create the module folder:
 
 ```text
-feature/
-├── feature.controller.js
-├── feature.service.js
-├── feature.routes.js
-├── feature.model.js
-└── feature.validator.js
+backend/src/modules/example/
+├── example.controller.js
+├── example.service.js
+├── example.routes.js
+├── example.model.js
+└── example.validator.js
 ```
 
-Then mount it in `backend/src/app.js`:
+Mount it in `backend/src/app.js`:
 
 ```js
-const featureRoutes = require('./modules/feature/feature.routes');
+const exampleRoutes = require('./modules/example/example.routes');
 
-apiV1.use('/features', featureRoutes);
+apiV1.use('/examples', exampleRoutes);
 ```
 
 ## Adding A Mobile Screen
 
-Place feature screens in `mobile/src/screens/<feature>`, then register them in the root navigator:
+Create a screen folder:
+
+```text
+mobile/src/screens/example/
+└── ExampleScreen.tsx
+```
+
+Register it in `mobile/src/types/navigation.ts`:
+
+```ts
+export type RootStackParamList = {
+  Example: undefined;
+};
+```
+
+Register it in `mobile/src/navigation/RootNavigator.tsx`:
 
 ```tsx
-<Stack.Screen name="Feature" component={FeatureScreen} />
+<Stack.Screen name="Example" component={ExampleScreen} />
 ```
 
-Keep API calls in `mobile/src/services` so screens stay focused on rendering and interactions.
+## Verification
 
-## Verification Checklist
-
-Before opening a pull request or handing the app to another developer:
-
-```bash
-npm run format
-npm run lint
-```
-
-For backend syntax-only verification without installing dependencies:
+Syntax-check backend JavaScript without installing dependencies:
 
 ```bash
 find backend/src -name '*.js' -print0 | xargs -0 -n 1 node --check
 ```
 
-## Production Notes
+After installing dependencies:
 
-- Use a managed MongoDB provider or a hardened self-hosted MongoDB deployment.
-- Use a long, random `JWT_SECRET` and rotate it with a planned invalidation strategy.
-- Store mobile auth tokens in secure storage, not plain AsyncStorage.
-- Add rate limiting before public release.
-- Add request logging and centralized error reporting.
-- Add integration tests before locking the API contract.
-- Add CI for linting, formatting, and backend tests.
+```bash
+npm run format
+npm run lint
+```
 
-## Folder Tree
+## Production Checklist
+
+- Replace development `JWT_SECRET` with a long random secret.
+- Use MongoDB Atlas or a hardened MongoDB deployment.
+- Add request rate limiting.
+- Add centralized logging and error reporting.
+- Store mobile auth tokens in secure storage.
+- Add integration tests for auth and protected routes.
+- Add API contract tests before mobile/backend integration grows.
+- Add CI for format, lint, and test checks.
+- Add real AI provider SDK calls where provider files currently return placeholders.
+
+## Complete Folder Tree
 
 ```text
 YOU/
@@ -447,34 +470,159 @@ YOU/
 ├── .prettierrc
 ├── backend/
 │   ├── README.md
-│   ├── .env.example
 │   ├── package.json
+│   ├── .env.example
+│   ├── .eslintrc.js
+│   ├── .prettierrc
 │   └── src/
 │       ├── app.js
 │       ├── server.js
 │       ├── config/
+│       │   ├── database.js
+│       │   ├── db.js
+│       │   ├── env.js
+│       │   └── jwt.js
 │       ├── middleware/
+│       │   ├── auth.js
+│       │   ├── auth.middleware.js
+│       │   ├── errorHandler.js
+│       │   ├── error.middleware.js
+│       │   ├── notFound.middleware.js
+│       │   └── validate.js
 │       ├── modules/
+│       │   ├── auth/
+│       │   │   ├── auth.controller.js
+│       │   │   ├── auth.model.js
+│       │   │   ├── auth.routes.js
+│       │   │   ├── auth.service.js
+│       │   │   └── auth.validator.js
+│       │   ├── user/
+│       │   │   ├── user.controller.js
+│       │   │   ├── user.model.js
+│       │   │   ├── user.routes.js
+│       │   │   ├── user.service.js
+│       │   │   └── user.validator.js
+│       │   ├── onboarding/
+│       │   │   ├── onboarding.controller.js
+│       │   │   ├── onboarding.model.js
+│       │   │   ├── onboarding.routes.js
+│       │   │   ├── onboarding.service.js
+│       │   │   └── onboarding.validator.js
+│       │   ├── roadmap/
+│       │   │   ├── roadmap.controller.js
+│       │   │   ├── roadmap.model.js
+│       │   │   ├── roadmap.routes.js
+│       │   │   ├── roadmap.service.js
+│       │   │   └── roadmap.validator.js
+│       │   ├── journey/
+│       │   │   ├── journey.controller.js
+│       │   │   ├── journey.model.js
+│       │   │   ├── journey.routes.js
+│       │   │   ├── journey.service.js
+│       │   │   └── journey.validator.js
+│       │   ├── journal/
+│       │   │   ├── journal.controller.js
+│       │   │   ├── journal.model.js
+│       │   │   ├── journal.routes.js
+│       │   │   ├── journal.service.js
+│       │   │   └── journal.validator.js
+│       │   ├── cards/
+│       │   │   ├── cards.controller.js
+│       │   │   ├── cards.model.js
+│       │   │   ├── cards.routes.js
+│       │   │   ├── cards.service.js
+│       │   │   └── cards.validator.js
+│       │   ├── ai/
+│       │   │   ├── ai.controller.js
+│       │   │   ├── ai.model.js
+│       │   │   ├── ai.routes.js
+│       │   │   ├── ai.service.js
+│       │   │   ├── ai.validator.js
+│       │   │   ├── prompts/
+│       │   │   │   ├── roadmap.prompt.js
+│       │   │   │   ├── journal.prompt.js
+│       │   │   │   └── card.prompt.js
+│       │   │   └── providers/
+│       │   │       ├── openai.js
+│       │   │       ├── claude.js
+│       │   │       └── gemini.js
+│       │   └── notifications/
+│       │       ├── notifications.controller.js
+│       │       ├── notifications.model.js
+│       │       ├── notifications.routes.js
+│       │       ├── notifications.service.js
+│       │       └── notifications.validator.js
 │       ├── utils/
+│       │   ├── apiError.js
+│       │   ├── ApiError.js
+│       │   ├── asyncHandler.js
+│       │   ├── jwt.js
+│       │   └── pick.js
 │       └── validators/
+│           ├── common.validator.js
+│           └── validateRequest.js
 └── mobile/
     ├── README.md
-    ├── App.tsx
-    ├── app.json
-    ├── index.js
     ├── package.json
+    ├── app.json
+    ├── App.tsx
+    ├── babel.config.js
+    ├── index.js
     ├── tsconfig.json
+    ├── .eslintrc.js
+    ├── .prettierrc
     └── src/
         ├── assets/
+        │   └── .gitkeep
         ├── components/
-        ├── screens/
-        ├── navigation/
-        ├── services/
-        ├── hooks/
-        ├── context/
-        ├── store/
-        ├── utils/
+        │   ├── AppButton.tsx
+        │   └── ScreenPlaceholder.tsx
         ├── constants/
+        │   ├── app.ts
+        │   └── env.ts
+        ├── context/
+        │   └── AuthContext.tsx
+        ├── hooks/
+        │   └── useAuth.ts
+        ├── navigation/
+        │   ├── AppNavigator.tsx
+        │   ├── RootNavigator.tsx
+        │   └── routes.ts
+        ├── screens/
+        │   ├── onboarding/
+        │   │   └── OnboardingScreen.tsx
+        │   ├── auth/
+        │   │   ├── LoginScreen.tsx
+        │   │   └── RegisterScreen.tsx
+        │   ├── home/
+        │   │   └── HomeScreen.tsx
+        │   ├── roadmap/
+        │   │   └── RoadmapScreen.tsx
+        │   ├── journey/
+        │   │   └── JourneyScreen.tsx
+        │   ├── journal/
+        │   │   └── JournalScreen.tsx
+        │   ├── cards/
+        │   │   └── CardsScreen.tsx
+        │   └── profile/
+        │       └── ProfileScreen.tsx
+        ├── services/
+        │   ├── api.ts
+        │   └── apiClient.ts
+        ├── store/
+        │   ├── index.ts
+        │   └── useProgressStore.ts
         ├── theme/
-        └── types/
+        │   ├── colors.ts
+        │   ├── index.ts
+        │   └── spacing.ts
+        ├── types/
+        │   ├── auth.ts
+        │   ├── index.ts
+        │   ├── navigation.ts
+        │   └── user.ts
+        └── utils/
+            ├── formatDate.ts
+            └── formatLevel.ts
 ```
+

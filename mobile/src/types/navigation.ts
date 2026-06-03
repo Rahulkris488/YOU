@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Home: undefined;
   Roadmap: undefined;
   Journey: undefined;
+  Journal: undefined;
   Cards: undefined;
   Profile: undefined;
 };
