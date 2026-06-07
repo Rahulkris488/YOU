@@ -19,7 +19,9 @@
     },
     "extra": {
       "apiBaseUrl": "http://localhost:4000"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
-
