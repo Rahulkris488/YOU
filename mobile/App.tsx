@@ -12,7 +12,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function App(): React.JSX.Element {
   const [fontsLoaded, fontError] = useFonts({
-    'SugarPeachy-Bold': require('./src/fonts/sugar-peachy/Sugar Peachy Bold.otf'),
+    'SugarPeachy-Bold': require('./src/fonts/sugar-peachy/SugarPeachy-Bold.otf'),
     'Chillax-Medium': require('./src/fonts/chillax-font/Chillax_Complete/Fonts/OTF/Chillax-Medium.otf'),
     'Chillax-Semibold': require('./src/fonts/chillax-font/Chillax_Complete/Fonts/OTF/Chillax-Semibold.otf'),
     'Chillax-Regular': require('./src/fonts/chillax-font/Chillax_Complete/Fonts/OTF/Chillax-Regular.otf'),

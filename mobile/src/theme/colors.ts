@@ -32,6 +32,20 @@ export const colors = {
     imperialRed: '#FF0C31',
     mango: '#FBD12C',
     lavenderFloral: '#AE78D2',
+
+    // Named palette
+    vex: '#6834A7',
+    empyr: '#E97302',
+    shade: '#2D2D2D',
+    rust: '#992C19',
+    echo: '#0FA39A',
+    null: '#EAEAEA',
+    vector: '#35B7FF',
+    ash: '#9C95B8',
+    noca: '#DA586C',
+    sage: '#7A9A68',
+    revenant: '#255084',
+    rage: '#C1192A',
   },
   
   // Keep tints for fallback
