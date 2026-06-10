@@ -43,7 +43,6 @@ export function RootNavigator() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Roadmap" component={RoadmapScreen} />
       <Stack.Screen name="Journey" component={JourneyScreen} />
       <Stack.Screen name="Journal" component={JournalScreen} />
