@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import { Settings, RefreshCw, User, Sparkles, Star } from 'lucide-react-native';
-import { colors } from '../../theme/colors';
+import { colors, theme } from '../../theme/colors';
 import { useProgressStore } from '../../store/useProgressStore';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -28,7 +28,7 @@ export function HomeScreen(): React.JSX.Element {
 
 
   // 2. State & Hooks
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { level, xp, streak, setProgress } = useProgressStore();
 
   // UX Simulators
@@ -36,6 +36,8 @@ export function HomeScreen(): React.JSX.Element {
   const [showRelapse, setShowRelapse] = useState(false);
   const [mirrorDayActive, setMirrorDayActive] = useState(false);
   const [mirrorSecondsLeft, setMirrorSecondsLeft] = useState(60);
+
+  const lightBg = colors.tints.purple;
 
   // Animation values
   const relapseFadeAnim = useRef(new Animated.Value(1)).current;
@@ -119,23 +121,25 @@ export function HomeScreen(): React.JSX.Element {
         {/* Top Header Section */}
         <View style={styles.header}>
           {/* Profile Badge */}
-          <View style={styles.profileBadge}>
-            <User size={22} color="#FFFFFF" />
+          <View 
+            style={[styles.profileBadge, { backgroundColor: lightBg }]}
+          >
+            <User size={22} color={theme.primary} />
           </View>
 
           {/* Stylized Logo Title */}
           <View style={styles.logoContainer}>
             <View style={styles.logoSubRow}>
-              <Star size={10} color="#F59E0B" fill="#F59E0B" />
-              <Text style={styles.logoSub}>BUILD YOUR STORY</Text>
-              <Star size={10} color="#F59E0B" fill="#F59E0B" />
+              <Star size={10} color={theme.primary} fill={theme.primary} />
+              <Text style={[styles.logoSub, { color: theme.primary }]}>BUILD YOUR STORY</Text>
+              <Star size={10} color={theme.primary} fill={theme.primary} />
             </View>
             <Text style={styles.logoText}>YOU</Text>
           </View>
 
           {/* Settings Action button */}
-          <Pressable style={styles.iconButton}>
-            <Settings size={22} color="#1A1C1E" />
+          <Pressable style={[styles.iconButton, { backgroundColor: lightBg }]}>
+            <Settings size={22} color={theme.primary} />
           </Pressable>
         </View>
 
@@ -229,10 +233,11 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#7C3AED',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 6,
+    borderWidth: 1.5,
+    borderColor: '#000000',
   },
   profileEmoji: {
     fontSize: 20,
@@ -265,10 +270,11 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 10,
-    backgroundColor: '#F59E0B',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 6,
+    borderWidth: 1.5,
+    borderColor: '#000000',
   },
   banner3am: {
     marginHorizontal: 16,

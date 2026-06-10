@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import { Home, Flame, Map, BookOpen, User, Star } from 'lucide-react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { theme } from '../../theme/colors';
 
 interface BottomNavbarProps {
   currentTab?: string;
@@ -8,10 +10,29 @@ interface BottomNavbarProps {
 }
 
 export function BottomNavbar({
-  currentTab = 'HOME',
   onTabChange,
 }: BottomNavbarProps): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState(currentTab);
+  const route = useRoute();
+  const navigation = useNavigation<any>();
+
+  let activeTab = 'HOME';
+  if (route.name === 'Home') activeTab = 'HOME';
+  else if (route.name === 'Journey') activeTab = 'STREAK';
+  else if (route.name === 'Roadmap') activeTab = 'YOUMAP';
+  else if (route.name === 'Journal') activeTab = 'YOUSTORY';
+  else if (route.name === 'Profile') activeTab = 'PROFILE';
+
+  const handlePress = (name: string) => {
+    if (name === 'HOME') navigation.navigate('Home');
+    else if (name === 'STREAK') navigation.navigate('Journey');
+    else if (name === 'YOUMAP') navigation.navigate('Roadmap');
+    else if (name === 'YOUSTORY') navigation.navigate('Journal');
+    else if (name === 'PROFILE') navigation.navigate('Profile');
+
+    if (onTabChange) {
+      onTabChange(name);
+    }
+  };
 
   const tabs = [
     { name: 'HOME', icon: Home },
@@ -20,16 +41,10 @@ export function BottomNavbar({
     { name: 'YOUSTORY', icon: BookOpen },
     { name: 'PROFILE', icon: User },
   ];
-
-  const handlePress = (name: string) => {
-    setActiveTab(name);
-    if (onTabChange) {
-      onTabChange(name);
-    }
-  };
+  const activeContentColor = '#0F172A';
 
   return (
-    <View style={styles.outerContainer}>
+    <View style={[styles.outerContainer, { borderColor: '#000000' }]}>
       <ImageBackground
         source={require('../../assets/navbar-bg.jpeg')}
         style={styles.navbarBg}
@@ -38,7 +53,7 @@ export function BottomNavbar({
       >
         <View style={styles.innerContainer}>
           {/* Left Star Decorative */}
-          <Star size={10} color="#FBD12C" fill="#FBD12C" style={styles.starDecoration} />
+          <Star size={10} color={theme.primary} fill={theme.primary} style={styles.starDecoration} />
 
           {tabs.map((tab, idx) => {
             const isActive = activeTab === tab.name;
@@ -53,18 +68,18 @@ export function BottomNavbar({
                   <View
                     style={[
                       styles.tabInner,
-                      isActive && styles.activeTabInner,
+                      isActive && [styles.activeTabInner, { backgroundColor: '#CEF932' }],
                     ]}
                   >
                     <Icon
                       size={18}
-                      color={isActive ? '#6C35EA' : '#FFFFFF'}
-                      fill={isActive && tab.name === 'STREAK' ? '#FF0C31' : 'none'}
+                      color={isActive ? activeContentColor : '#FFFFFF'}
+                      fill={isActive && tab.name === 'STREAK' ? '#0F172A' : 'none'}
                     />
                     <Text
                       style={[
                         styles.tabLabel,
-                        isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
+                        isActive ? [styles.activeTabLabel, { color: activeContentColor }] : styles.inactiveTabLabel,
                       ]}
                     >
                       {tab.name}
@@ -81,7 +96,7 @@ export function BottomNavbar({
           })}
 
           {/* Right Star Decorative */}
-          <Star size={10} color="#FBD12C" fill="#FBD12C" style={styles.starDecoration} />
+          <Star size={10} color={theme.primary} fill={theme.primary} style={styles.starDecoration} />
         </View>
       </ImageBackground>
     </View>
@@ -133,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   activeTabInner: {
-    backgroundColor: '#FBD12C', // Mango/Yellow color from mockup
+    backgroundColor: '#CEF932', // Neon Lime
     borderWidth: 1,
     borderColor: '#000000',
   },

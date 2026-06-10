@@ -61,5 +61,22 @@ export const colors = {
     orangeDark: '#EA580C',
     blueDark: '#2563EB',
     pinkDark: '#DC2626',
+    
   }
 };
+
+export const theme = {
+  primary: '#6B4EFF',
+  secondary: '#0FA39A',
+  textLight: '#FFFFFF',
+  textDark: '#1A1C1E',
+  shades: {
+    streak: { bg: '#5d27b9ff', text: '#FFFFFF', border: '#6D28D9' },
+    chapters: { bg: '#4F46E5', text: '#FFFFFF', border: '#3730A3' },
+    achievements: { bg: '#6B4EFF', text: '#FFFFFF', border: '#553CDB' },
+    xp: { bg: '#CEF932', text: '#0F172A', border: '#B4E300' },
+    goals: { bg: '#ADDF00', text: '#0F172A', border: '#98B900' },
+    progress: { bg: '#E1FF63', text: '#0F172A', border: '#C8E640' }
+  }
+};
+
