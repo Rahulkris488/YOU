@@ -8,7 +8,16 @@
   ],
   "scripts": {
     "lint": "npm run lint --workspace backend && npm run lint --workspace mobile",
-    "format": "npm run format --workspace backend && npm run format --workspace mobile"
+    "format": "npm run format --workspace backend && npm run format --workspace mobile",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "overrides": {
+    "expo-font": "12.0.10"
+  },
+  "dependencies": {
+    "expo": "~51.0.28",
+    "react": "18.2.0",
+    "react-native": "0.74.5"
   }
 }
-

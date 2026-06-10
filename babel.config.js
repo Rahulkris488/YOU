@@ -10,7 +10,7 @@ module.exports = function babelConfig(api) {
         'module-resolver',
         {
           alias: {
-            '@': path.resolve(__dirname, 'src'),
+            '@': path.resolve(__dirname, 'mobile/src'),
           },
         },
       ],
