@@ -191,7 +191,7 @@ export function StatsGrid({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 10,
+    marginHorizontal: 6,
     marginTop: 42,
     position: 'relative',
     height: 340,

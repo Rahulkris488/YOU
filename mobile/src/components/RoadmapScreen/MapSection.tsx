@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   mapContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop:0,
+    paddingTop:10,
     paddingHorizontal:1,
   },
   mapImage: {

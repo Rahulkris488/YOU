@@ -6,6 +6,7 @@ import { BottomNavbar } from '@/components/HomeScreen/BottomNavbar';
 import { RoadmapHeader } from '@/components/RoadmapScreen/RoadmapHeader';
 import { MapSection } from '@/components/RoadmapScreen/MapSection';
 import { TaskCard } from '@/components/RoadmapScreen/TaskCard';
+import { ChapterProgressCard } from '@/components/RoadmapScreen/ChapterProgressCard';
 
 export function RoadmapScreen(): React.JSX.Element {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ export function RoadmapScreen(): React.JSX.Element {
         <RoadmapHeader theme={theme} />
         <TaskCard theme={theme} />
         <MapSection />
+        <ChapterProgressCard />
       </ScrollView>
 
       <BottomNavbar />
@@ -33,6 +35,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   scrollContent: {
-    paddingBottom: 110,
+    paddingBottom: 100,
   },
 });

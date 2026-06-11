@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
   header: {
     flexDirection: 'row',

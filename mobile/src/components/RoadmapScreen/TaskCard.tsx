@@ -12,7 +12,7 @@ interface TaskCardProps {
 export function TaskCard({ theme }: TaskCardProps) {
   return (
     <View style={styles.taskCardContainer}>
-      <View style={[styles.taskCard, { backgroundColor: '#000000', borderColor: '#000000' }]}>
+      <View style={[styles.taskCard, { backgroundColor: '#6B4EFF', borderColor: '#000000' }]}>
         <View style={styles.taskCardLeft}>
           <View style={styles.taskIconContainer}>
             <Clipboard size={18} color="#CEF932" />
