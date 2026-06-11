@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable, Dimensions } from 'react-native';
 import { Flame, BookOpen, Trophy, Star, Target, BarChart2, ChevronRight } from 'lucide-react-native';
-import { colors } from '../../theme/colors';
+import { colors, theme } from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
 const COLUMN_WIDTH = (width - 20 - 200) / 2; // Subtract margins and center space
@@ -29,12 +29,13 @@ export function StatsGrid({
   overallProgress = 78,
   onCardPress = () => undefined,
 }: StatsGridProps): React.JSX.Element {
+
   return (
     <View style={styles.container}>
       {/* Background Ornament Behind Avatar */}
       <View style={styles.avatarBackdrop}>
-        <View style={styles.dottedRingOuter}>
-          <View style={styles.dottedRingInner} />
+        <View style={[styles.dottedRingOuter, { borderColor: '#CEF932', opacity: 0.8 }]}>
+          <View style={[styles.dottedRingInner, { borderColor: '#CEF932', opacity: 0.4 }]} />
         </View>
       </View>
 
@@ -51,15 +52,15 @@ export function StatsGrid({
         <View style={styles.column}>
           {/* Card 1: Day Streak */}
           <Pressable
-            style={[styles.card, { backgroundColor: colors.solid.indigo, borderColor: '#551FCA' }]}
+            style={[styles.card, { backgroundColor: theme.shades.streak.bg, borderColor: theme.shades.streak.border }]}
             onPress={() => onCardPress('Streak')}
           >
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.statNumber}>{streak}</Text>
-              <Flame size={16} color="#FDE047" fill="#F59E0B" />
+              <Text style={[styles.statNumber, { color: theme.shades.streak.text }]}>{streak}</Text>
+              <Flame size={16} color={theme.shades.streak.text === '#FFFFFF' ? '#FDE047' : theme.secondary} fill={theme.shades.streak.text === '#FFFFFF' ? '#F59E0B' : theme.secondary} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={styles.statLabel} numberOfLines={1}>DAY STREAK</Text>
+              <Text style={[styles.statLabel, { color: theme.shades.streak.text, opacity: 0.85 }]} numberOfLines={1}>DAY STREAK</Text>
               <View style={styles.streakDotsRow}>
                 {[...Array(7)].map((_, i) => (
                   <View
@@ -68,7 +69,7 @@ export function StatsGrid({
                       styles.streakDot,
                       {
                         backgroundColor:
-                          i < 5 ? '#FBBF24' : 'rgba(255, 255, 255, 0.25)',
+                          i < 5 ? (theme.shades.streak.text === '#FFFFFF' ? '#FBBF24' : theme.secondary) : 'rgba(255, 255, 255, 0.25)',
                       },
                     ]}
                   />
@@ -77,37 +78,37 @@ export function StatsGrid({
             </View>
           </Pressable>
 
-          {/* Card 2: Chapter 1 (Lime Card - Dark Text) */}
+          {/* Card 2: Chapter 1 (Lime/Driver themed) */}
           <Pressable
-            style={[styles.card, { backgroundColor: colors.solid.lime, borderColor: '#9BBF1B' }]}
+            style={[styles.card, { backgroundColor: theme.shades.chapters.bg, borderColor: theme.shades.chapters.border }]}
             onPress={() => onCardPress('Chapters')}
           >
             <View style={styles.cardHeaderRow}>
-              <Text style={[styles.chapterTitle, { color: '#1A1C1E' }]} numberOfLines={1}>CH {currentChapter}</Text>
-              <BookOpen size={16} color="#1A1C1E" />
+              <Text style={[styles.chapterTitle, { color: theme.shades.chapters.text }]} numberOfLines={1}>CH {currentChapter}</Text>
+              <BookOpen size={16} color={theme.shades.chapters.text} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={[styles.chapterSubtitle, { color: 'rgba(26, 28, 30, 0.7)' }]} numberOfLines={1}>
+              <Text style={[styles.chapterSubtitle, { color: theme.shades.chapters.text, opacity: 0.85 }]} numberOfLines={1}>
                 {currentChapter}/{totalChapters} Chapters
               </Text>
-              <View style={[styles.progressBarBg, { backgroundColor: 'rgba(0, 0, 0, 0.15)' }]}>
-                <View style={[styles.progressBarFill, { width: `${(currentChapter / totalChapters) * 100}%`, backgroundColor: '#1A1C1E' }]} />
+              <View style={[styles.progressBarBg, { backgroundColor: theme.shades.chapters.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
+                <View style={[styles.progressBarFill, { width: `${(currentChapter / totalChapters) * 100}%`, backgroundColor: theme.shades.chapters.text }]} />
               </View>
             </View>
           </Pressable>
 
           {/* Card 3: Achievements */}
           <Pressable
-            style={[styles.card, { backgroundColor: colors.solid.safetyOrange, borderColor: '#C96200' }]}
+            style={[styles.card, { backgroundColor: theme.shades.achievements.bg, borderColor: theme.shades.achievements.border }]}
             onPress={() => onCardPress('Achievements')}
           >
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.statNumber}>{achievementsCount}</Text>
-              <Trophy size={16} color="#FFFFFF" />
+              <Text style={[styles.statNumber, { color: theme.shades.achievements.text }]}>{achievementsCount}</Text>
+              <Trophy size={16} color={theme.shades.achievements.text} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={styles.statLabel} numberOfLines={1}>ACHIEVEMENTS</Text>
-              <ChevronRight size={11} color="#FFFFFF" style={styles.bottomChevron} />
+              <Text style={[styles.statLabel, { color: theme.shades.achievements.text, opacity: 0.85 }]} numberOfLines={1}>ACHIEVEMENTS</Text>
+              <ChevronRight size={11} color={theme.shades.achievements.text} style={styles.bottomChevron} />
             </View>
           </Pressable>
         </View>
@@ -119,34 +120,34 @@ export function StatsGrid({
         <View style={styles.column}>
           {/* Card 1: Total XP */}
           <Pressable
-            style={[styles.card, { backgroundColor: colors.solid.blue, borderColor: '#0267BD' }]}
+            style={[styles.card, { backgroundColor: theme.shades.xp.bg, borderColor: theme.shades.xp.border }]}
             onPress={() => onCardPress('XP')}
           >
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.statNumber}>{totalXp}</Text>
-              <Star size={16} color="#FBBF24" fill="#FBBF24" />
+              <Text style={[styles.statNumber, { color: theme.shades.xp.text }]}>{totalXp}</Text>
+              <Star size={16} color={theme.shades.xp.text} fill={theme.shades.xp.text === '#FFFFFF' ? '#FBBF24' : 'rgba(15, 23, 42, 0.3)'} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={styles.statLabel} numberOfLines={1}>TOTAL XP</Text>
-              <View style={styles.progressBarBg}>
-                <View style={[styles.progressBarFill, { width: '80%', backgroundColor: '#FFFFFF' }]} />
+              <Text style={[styles.statLabel, { color: theme.shades.xp.text, opacity: 0.85 }]} numberOfLines={1}>TOTAL XP</Text>
+              <View style={[styles.progressBarBg, { backgroundColor: theme.shades.xp.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
+                <View style={[styles.progressBarFill, { width: '80%', backgroundColor: theme.shades.xp.text }]} />
               </View>
             </View>
           </Pressable>
 
           {/* Card 2: Goals This Week */}
           <Pressable
-            style={[styles.card, { backgroundColor: colors.solid.imperialRed, borderColor: '#CC0927' }]}
+            style={[styles.card, { backgroundColor: theme.shades.goals.bg, borderColor: theme.shades.goals.border }]}
             onPress={() => onCardPress('Goals')}
           >
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.statNumber} numberOfLines={1}>
+              <Text style={[styles.statNumber, { color: theme.shades.goals.text }]} numberOfLines={1}>
                 {goalsThisWeek}/{totalGoalsThisWeek}
               </Text>
-              <Target size={16} color="#FFFFFF" />
+              <Target size={16} color={theme.shades.goals.text} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={styles.statLabel} numberOfLines={1}>GOALS THIS WEEK</Text>
+              <Text style={[styles.statLabel, { color: theme.shades.goals.text, opacity: 0.85 }]} numberOfLines={1}>GOALS THIS WEEK</Text>
               <View style={styles.goalsBlocksRow}>
                 {[...Array(totalGoalsThisWeek)].map((_, i) => (
                   <View
@@ -154,32 +155,32 @@ export function StatsGrid({
                     style={[
                       styles.goalBlock,
                       {
-                        backgroundColor:
-                          i < goalsThisWeek ? '#FFFFFF' : 'rgba(255, 255, 255, 0.25)',
+                         backgroundColor:
+                          i < goalsThisWeek ? theme.shades.goals.text : (theme.shades.goals.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.15)'),
                       },
                     ]}
                   />
                 ))}
               </View>
-              <ChevronRight size={11} color="#FFFFFF" style={styles.bottomChevron} />
+              <ChevronRight size={11} color={theme.shades.goals.text} style={styles.bottomChevron} />
             </View>
           </Pressable>
 
-          {/* Card 3: Overall Progress (Mango Card - Dark Text) */}
+          {/* Card 3: Overall Progress */}
           <Pressable
-            style={[styles.card, { backgroundColor: colors.solid.mango, borderColor: '#C9A71E' }]}
+            style={[styles.card, { backgroundColor: theme.shades.progress.bg, borderColor: theme.shades.progress.border }]}
             onPress={() => onCardPress('Progress')}
           >
             <View style={styles.cardHeaderRow}>
-              <Text style={[styles.statNumber, { color: '#1A1C1E' }]}>{overallProgress}%</Text>
-              <BarChart2 size={16} color="#1A1C1E" />
+              <Text style={[styles.statNumber, { color: theme.shades.progress.text }]}>{overallProgress}%</Text>
+              <BarChart2 size={16} color={theme.shades.progress.text} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={[styles.statLabel, { color: 'rgba(26, 28, 30, 0.7)' }]} numberOfLines={1}>PROGRESS</Text>
-              <View style={[styles.progressBarBg, { backgroundColor: 'rgba(0, 0, 0, 0.15)' }]}>
-                <View style={[styles.progressBarFill, { width: `${overallProgress}%`, backgroundColor: '#1A1C1E' }]} />
+              <Text style={[styles.statLabel, { color: theme.shades.progress.text, opacity: 0.85 }]} numberOfLines={1}>PROGRESS</Text>
+              <View style={[styles.progressBarBg, { backgroundColor: theme.shades.progress.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
+                <View style={[styles.progressBarFill, { width: `${overallProgress}%`, backgroundColor: theme.shades.progress.text }]} />
               </View>
-              <ChevronRight size={11} color="#1A1C1E" style={styles.bottomChevron} />
+              <ChevronRight size={11} color={theme.shades.progress.text} style={styles.bottomChevron} />
             </View>
           </Pressable>
         </View>
@@ -190,7 +191,7 @@ export function StatsGrid({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 10,
+    marginHorizontal: 6,
     marginTop: 42,
     position: 'relative',
     height: 340,
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 104,
     borderRadius: 10,
-    borderWidth: 1.5,
+    borderWidth: 2.5,
     padding: 10,
     position: 'relative',
     justifyContent: 'flex-start',
@@ -255,7 +256,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 10,
     elevation: 5,
-    marginBottom:20
+    marginBottom:20,
+ 
+    borderColor: '#000000',
   },
   cardBottomSection: {
     flex: 1,

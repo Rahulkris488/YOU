@@ -1,89 +1,110 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
-import { Home, Flame, Map, BookOpen, User, Star } from 'lucide-react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Home, Flame, Map, BookOpen, User } from 'lucide-react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 
 interface BottomNavbarProps {
   currentTab?: string;
   onTabChange?: (tab: string) => void;
 }
 
+const TabHump = () => (
+  <View style={styles.humpContainer}>
+    <Svg width={160} height={38} viewBox="0 0 160 38">
+      <Path
+        d="M 0 37 C 40 37, 50 2, 80 2 C 110 2, 120 37, 160 37 L 160 38 L 0 38 Z"
+        fill="#1A1A1A"
+      />
+      <Path
+        d="M 0 37 C 40 37, 50 2, 80 2 C 110 2, 120 37, 160 37"
+        fill="none"
+        stroke="#2A2A2A"
+        strokeWidth={1.5}
+      />
+    </Svg>
+  </View>
+);
+
 export function BottomNavbar({
-  currentTab = 'HOME',
   onTabChange,
 }: BottomNavbarProps): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState(currentTab);
+  const route = useRoute();
+  const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
 
-  const tabs = [
-    { name: 'HOME', icon: Home },
-    { name: 'STREAK', icon: Flame },
-    { name: 'YOUMAP', icon: Map },
-    { name: 'YOUSTORY', icon: BookOpen },
-    { name: 'PROFILE', icon: User },
-  ];
+  let activeTab = 'HOME';
+  if (route.name === 'Home') activeTab = 'HOME';
+  else if (route.name === 'Journey') activeTab = 'STREAK';
+  else if (route.name === 'Roadmap') activeTab = 'YOUMAP';
+  else if (route.name === 'Journal') activeTab = 'YOUSTORY';
+  else if (route.name === 'Profile') activeTab = 'PROFILE';
 
   const handlePress = (name: string) => {
-    setActiveTab(name);
+    if (name === 'HOME') navigation.navigate('Home');
+    else if (name === 'STREAK') navigation.navigate('Journey');
+    else if (name === 'YOUMAP') navigation.navigate('Roadmap');
+    else if (name === 'YOUSTORY') navigation.navigate('Journal');
+    else if (name === 'PROFILE') navigation.navigate('Profile');
+
     if (onTabChange) {
       onTabChange(name);
     }
   };
 
+  const tabs = [
+    { name: 'STREAK', label: 'Streak', icon: Flame },
+    { name: 'YOUMAP', label: 'Map', icon: Map },
+    { name: 'HOME', label: 'Home', icon: Home },
+    { name: 'YOUSTORY', label: 'Journal', icon: BookOpen },
+    { name: 'PROFILE', label: 'Profile', icon: User },
+  ];
+
+  const barHeight = 60 + insets.bottom;
+
   return (
-    <View style={styles.outerContainer}>
-      <ImageBackground
-        source={require('../../assets/navbar-bg.jpeg')}
-        style={styles.navbarBg}
-        imageStyle={styles.navbarImage}
-        resizeMode="cover"
-      >
-        <View style={styles.innerContainer}>
-          {/* Left Star Decorative */}
-          <Star size={10} color="#FBD12C" fill="#FBD12C" style={styles.starDecoration} />
+    <View style={[styles.outerContainer, { height: barHeight, paddingBottom: insets.bottom }]}>
+      <View style={styles.innerContainer}>
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.name;
+          const Icon = tab.icon;
+          const isHome = tab.name === 'HOME';
 
-          {tabs.map((tab, idx) => {
-            const isActive = activeTab === tab.name;
-            const Icon = tab.icon;
-
-            return (
-              <React.Fragment key={tab.name}>
-                <Pressable
-                  onPress={() => handlePress(tab.name)}
-                  style={styles.tabButton}
-                >
-                  <View
-                    style={[
-                      styles.tabInner,
-                      isActive && styles.activeTabInner,
-                    ]}
-                  >
-                    <Icon
-                      size={18}
-                      color={isActive ? '#6C35EA' : '#FFFFFF'}
-                      fill={isActive && tab.name === 'STREAK' ? '#FF0C31' : 'none'}
-                    />
-                    <Text
-                      style={[
-                        styles.tabLabel,
-                        isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
-                      ]}
-                    >
-                      {tab.name}
-                    </Text>
+          return (
+            <Pressable
+              key={tab.name}
+              onPress={() => handlePress(tab.name)}
+              style={styles.tabButton}
+            >
+              {isHome ? (
+                <>
+                  <TabHump />
+                  <View style={styles.activeCircle}>
+                    <Icon size={20} color="#FFFFFF" />
                   </View>
-                </Pressable>
-
-                {/* Vertical Divider only between inactive tabs */}
-                {idx < tabs.length - 1 && activeTab !== tab.name && activeTab !== tabs[idx + 1].name && (
-                  <View style={styles.divider} />
-                )}
-              </React.Fragment>
-            );
-          })}
-
-          {/* Right Star Decorative */}
-          <Star size={10} color="#FBD12C" fill="#FBD12C" style={styles.starDecoration} />
-        </View>
-      </ImageBackground>
+                  <Text style={isActive ? styles.tabLabelActiveHome : styles.tabLabelInactiveHome}>
+                    {tab.label}
+                  </Text>
+                  {isActive && <View style={styles.activeDotHome} />}
+                </>
+              ) : (
+                <>
+                  <Icon
+                    size={20}
+                    color={isActive ? '#CEF932' : '#FFFFFF'}
+                    fill={tab.name === 'STREAK' && isActive ? '#CEF932' : 'none'}
+                  />
+                  <Text style={isActive ? styles.tabLabelActive : styles.tabLabelInactive}>
+                    {tab.label}
+                  </Text>
+                  {isActive && <View style={styles.activeDot} />}
+                </>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -91,26 +112,15 @@ export function BottomNavbar({
 const styles = StyleSheet.create({
   outerContainer: {
     position: 'absolute',
-    bottom: 8,
-    left: 20,
-    right: 20,
-    height: 55,
-    borderRadius: 26,
-    borderWidth: 2,
-    borderColor: '#000000',
-    overflow: 'hidden',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 6,
-  },
-  navbarBg: {
-    width: '100%',
-    height: '100%',
-  },
-  navbarImage: {
-    borderRadius: 10,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#1A1A1A',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    borderTopWidth: 1.5,
+    borderTopColor: '#2A2A2A',
+    zIndex: 1000,
   },
   innerContainer: {
     flex: 1,
@@ -118,43 +128,85 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 8,
+    height: 60,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    position: 'relative',
   },
-  tabInner: {
-    width: 52, // Fixed width so active yellow bg is not too wide
-    height: 42,
-    borderRadius: 10,
+  humpContainer: {
+    position: 'absolute',
+    top: -36.5,
+    width: 160,
+    height: 38,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
   },
-  activeTabInner: {
-    backgroundColor: '#FBD12C', // Mango/Yellow color from mockup
-    borderWidth: 1,
-    borderColor: '#000000',
+  activeCircle: {
+    position: 'absolute',
+    top: -24,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#6B4EFF', // Brand Purple
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2,
+    shadowColor: '#6B4EFF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
   },
-  tabLabel: {
+  tabLabelActiveHome: {
     fontFamily: 'Chillax-Bold',
-    fontSize: 7.5,
+    fontSize: 8,
+    color: '#CEF932', // Neon Lime text
+    marginTop: 34,
     letterSpacing: 0.5,
-    marginTop: 1.5,
+    zIndex: 2,
   },
-  activeTabLabel: {
-    color: '#1A1C1E',
-  },
-  inactiveTabLabel: {
+  tabLabelInactiveHome: {
+    fontFamily: 'Chillax-Bold',
+    fontSize: 8,
     color: '#FFFFFF',
+    marginTop: 34,
+    letterSpacing: 0.5,
+    opacity: 0.8,
+    zIndex: 2,
   },
-  divider: {
-    width: 1,
-    height: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+  activeDotHome: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#CEF932',
+    marginTop: 2,
+    zIndex: 2,
   },
-  starDecoration: {
-    marginHorizontal: 2,
+  tabLabelActive: {
+    fontFamily: 'Chillax-Bold',
+    fontSize: 8,
+    color: '#CEF932', // Neon Lime text
+    marginTop: 5,
+    letterSpacing: 0.5,
+  },
+  tabLabelInactive: {
+    fontFamily: 'Chillax-Bold',
+    fontSize: 8,
+    color: '#FFFFFF',
+    marginTop: 5,
+    letterSpacing: 0.5,
+    opacity: 0.8,
+  },
+  activeDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#CEF932',
+    marginTop: 2,
   },
 });

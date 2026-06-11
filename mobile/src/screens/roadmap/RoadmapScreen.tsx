@@ -1,7 +1,40 @@
 import React from 'react';
-import { ScreenPlaceholder } from '../../components/ScreenPlaceholder';
+import { StyleSheet, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import { useAuth } from '@/hooks/useAuth';
+import { theme } from '@/theme/colors';
+import { BottomNavbar } from '@/components/HomeScreen/BottomNavbar';
+import { RoadmapHeader } from '@/components/RoadmapScreen/RoadmapHeader';
+import { MapSection } from '@/components/RoadmapScreen/MapSection';
+import { TaskCard } from '@/components/RoadmapScreen/TaskCard';
+import { ChapterProgressCard } from '@/components/RoadmapScreen/ChapterProgressCard';
 
 export function RoadmapScreen(): React.JSX.Element {
-  return <ScreenPlaceholder title="YOUmap" description="Levels, tasks, and progression milestones." />;
+  const { user } = useAuth();
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <RoadmapHeader theme={theme} />
+        <TaskCard theme={theme} />
+        <MapSection />
+        <ChapterProgressCard />
+      </ScrollView>
+
+      <BottomNavbar />
+    </SafeAreaView>
+  );
 }
 
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#FAF9F6',
+    position: 'relative',
+  },
+  scrollContent: {
+    paddingBottom: 100,
+  },
+});
