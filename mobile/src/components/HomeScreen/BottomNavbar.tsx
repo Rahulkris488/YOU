@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Home, Flame, Map, BookOpen, User } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Home, Flame, Map, BookOpen, User, Star } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
@@ -41,6 +41,7 @@ export function BottomNavbar({
   else if (route.name === 'Journal') activeTab = 'YOUSTORY';
   else if (route.name === 'Profile') activeTab = 'PROFILE';
 
+
   const handlePress = (name: string) => {
     if (name === 'HOME') navigation.navigate('Home');
     else if (name === 'STREAK') navigation.navigate('Journey');
@@ -50,6 +51,12 @@ export function BottomNavbar({
 
     if (onTabChange) {
       onTabChange(name);
+    }
+
+    if (name === 'PROFILE') {
+      navigation.navigate('Profile');
+    } else if (name === 'HOME') {
+      navigation.navigate('Home');
     }
   };
 

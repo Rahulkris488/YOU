@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, ScrollView, SafeAreaView, Dimensions } from 'react-native';
-import { useAuth } from '@/hooks/useAuth';
-import { theme } from '@/theme/colors';
-import { BottomNavbar } from '@/components/HomeScreen/BottomNavbar';
-import { RoadmapHeader } from '@/components/RoadmapScreen/RoadmapHeader';
-import { MapSection } from '@/components/RoadmapScreen/MapSection';
-import { TaskCard } from '@/components/RoadmapScreen/TaskCard';
-import { ChapterProgressCard } from '@/components/RoadmapScreen/ChapterProgressCard';
+import { useAuth } from '../../hooks/useAuth';
+import { theme } from '../../theme/colors';
+import { BottomNavbar } from '../../components/HomeScreen/BottomNavbar';
+import { RoadmapHeader } from '../../components/RoadmapScreen/RoadmapHeader';
+import { MapSection } from '../../components/RoadmapScreen/MapSection';
+import { TaskCard } from '../../components/RoadmapScreen/TaskCard';
+import { ChapterProgressCard } from '../../components/RoadmapScreen/ChapterProgressCard';
 
 export function RoadmapScreen(): React.JSX.Element {
   const { user } = useAuth();

@@ -1,18 +1,18 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { LoginScreen } from '@/screens/auth/LoginScreen';
-import { RegisterScreen } from '@/screens/auth/RegisterScreen';
-import { WelcomeScreen } from '@/screens/auth/WelcomeScreen';
-import { CardsScreen } from '@/screens/cards/CardsScreen';
-import { HomeScreen } from '@/screens/home/HomeScreen';
-import { JournalScreen } from '@/screens/journal/JournalScreen';
-import { JourneyScreen } from '@/screens/journey/JourneyScreen';
-import { OnboardingScreen } from '@/screens/onboarding/OnboardingScreen';
-import { ProfileScreen } from '@/screens/profile/ProfileScreen';
-import { RoadmapScreen } from '@/screens/roadmap/RoadmapScreen';
-import { useAuth } from '@/hooks/useAuth';
-import type { RootStackParamList } from '@/types/navigation';
+import { LoginScreen } from '../screens/auth/LoginScreen';
+import { RegisterScreen } from '../screens/auth/RegisterScreen';
+import { WelcomeScreen } from '../screens/auth/WelcomeScreen';
+import { CardsScreen } from '../screens/cards/CardsScreen';
+import { HomeScreen } from '../screens/home/HomeScreen';
+import { JournalScreen } from '../screens/journal/JournalScreen';
+import { JourneyScreen } from '../screens/journey/JourneyScreen';
+import { OnboardingScreen } from '../screens/onboarding/OnboardingScreen';
+import ProfileScreen from '../screens/profile/ProfileScreen';
+import { RoadmapScreen } from '../screens/roadmap/RoadmapScreen';
+import { useAuth } from '../hooks/useAuth';
+import type { RootStackParamList } from '../types/navigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
