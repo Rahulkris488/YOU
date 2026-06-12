@@ -15,6 +15,7 @@ import { Settings, RefreshCw, User, Sparkles, Star } from 'lucide-react-native';
 import { colors, theme } from '../../theme/colors';
 import { useProgressStore } from '../../store/useProgressStore';
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigation } from '@react-navigation/native';
 
 // Subcomponents
 import { GoalHeaderCard } from '../../components/HomeScreen/GoalHeaderCard';
@@ -29,6 +30,7 @@ export function HomeScreen(): React.JSX.Element {
 
   // 2. State & Hooks
   const { user, updateUser } = useAuth();
+  const navigation = useNavigation<any>();
   const { level, xp, streak, setProgress } = useProgressStore();
 
   // UX Simulators
@@ -121,11 +123,12 @@ export function HomeScreen(): React.JSX.Element {
         {/* Top Header Section */}
         <View style={styles.header}>
           {/* Profile Badge */}
-          <View 
-            style={[styles.profileBadge, { backgroundColor: lightBg }]}
+          <Pressable 
+            style={[styles.profileBadge, { backgroundColor: lightBg }]} 
+            onPress={() => navigation.navigate('Profile')}
           >
             <User size={22} color={theme.primary} />
-          </View>
+          </Pressable>
 
           {/* Stylized Logo Title */}
           <View style={styles.logoContainer}>

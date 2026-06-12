@@ -12,6 +12,7 @@ module.exports = function babelConfig(api) {
           alias: {
             '@': path.resolve(__dirname, 'src'),
           },
+          extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
         },
       ],
     ],

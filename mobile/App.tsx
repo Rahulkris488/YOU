@@ -6,9 +6,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from './src/context/AuthContext';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { colors } from './src/theme/colors';
-
 // Keep splash screen visible while fonts load
-SplashScreen.preventAutoHideAsync().catch(() => {});
+SplashScreen.preventAutoHideAsync().catch(() => { });
 
 function App(): React.JSX.Element {
   const [fontsLoaded, fontError] = useFonts({

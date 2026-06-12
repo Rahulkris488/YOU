@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeft, Settings, Star } from 'lucide-react-native';
-import { colors } from '@/theme/colors';
+import { colors } from '../../theme/colors';
 
 interface RoadmapHeaderProps {
   theme: {

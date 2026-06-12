@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { OnboardingFlow } from '@/app/onboarding';
+import { OnboardingFlow } from '@/app-screens/onboarding';
 import type { RootStackParamList } from '@/types/navigation';
 import type { DriverId } from '@/types/onboarding';
 import { useAuth } from '@/hooks/useAuth';
