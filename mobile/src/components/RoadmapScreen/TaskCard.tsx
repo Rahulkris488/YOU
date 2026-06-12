@@ -18,7 +18,7 @@ export function TaskCard({ theme }: TaskCardProps) {
             <Clipboard size={18} color="#CEF932" />
           </View>
           <View style={styles.taskCardTexts}>
-            <Text style={[styles.taskKicker, { color: '#CEF932' }]}>TODAY'S TASK</Text>
+            <Text style={[styles.taskKicker, { color: '#000000' }]}>TODAY'S TASK</Text>
             <Text style={styles.taskTitle}>Practice a basic cut in your project</Text>
           </View>
         </View>

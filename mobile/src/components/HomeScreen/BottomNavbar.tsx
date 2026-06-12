@@ -15,12 +15,12 @@ const TabHump = () => (
     <Svg width={160} height={38} viewBox="0 0 160 38">
       <Path
         d="M 0 37 C 40 37, 50 2, 80 2 C 110 2, 120 37, 160 37 L 160 38 L 0 38 Z"
-        fill="#1A1A1A"
+        fill="#121212"
       />
       <Path
         d="M 0 37 C 40 37, 50 2, 80 2 C 110 2, 120 37, 160 37"
         fill="none"
-        stroke="#2A2A2A"
+        stroke="#222222"
         strokeWidth={1.5}
       />
     </Svg>
@@ -81,7 +81,7 @@ export function BottomNavbar({
                 <>
                   <TabHump />
                   <View style={styles.activeCircle}>
-                    <Icon size={20} color="#FFFFFF" />
+                    <Icon size={20} color="#000000" />
                   </View>
                   <Text style={isActive ? styles.tabLabelActiveHome : styles.tabLabelInactiveHome}>
                     {tab.label}
@@ -115,11 +115,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#121212',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     borderTopWidth: 1.5,
-    borderTopColor: '#2A2A2A',
+    borderTopColor: '#222222',
     zIndex: 1000,
   },
   innerContainer: {
@@ -152,11 +152,11 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#6B4EFF', // Brand Purple
+    backgroundColor: '#CEF932', // Brand Neon
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 2,
-    shadowColor: '#6B4EFF',
+    shadowColor: '#CEF932',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 6,

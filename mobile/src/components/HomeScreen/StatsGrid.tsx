@@ -52,7 +52,7 @@ export function StatsGrid({
         <View style={styles.column}>
           {/* Card 1: Day Streak */}
           <Pressable
-            style={[styles.card, { backgroundColor: theme.shades.streak.bg, borderColor: theme.shades.streak.border }]}
+            style={styles.streakCard}
             onPress={() => onCardPress('Streak')}
           >
             <View style={styles.cardHeaderRow}>
@@ -61,26 +61,29 @@ export function StatsGrid({
             </View>
             <View style={styles.cardBottomSection}>
               <Text style={[styles.statLabel, { color: theme.shades.streak.text, opacity: 0.85 }]} numberOfLines={1}>DAY STREAK</Text>
-              <View style={styles.streakDotsRow}>
-                {[...Array(7)].map((_, i) => (
-                  <View
-                    key={i}
-                    style={[
-                      styles.streakDot,
-                      {
-                        backgroundColor:
-                          i < 5 ? (theme.shades.streak.text === '#FFFFFF' ? '#FBBF24' : theme.secondary) : 'rgba(255, 255, 255, 0.25)',
-                      },
-                    ]}
-                  />
-                ))}
+              <View style={styles.rowAlign}>
+                <View style={styles.streakDotsRow}>
+                  {[...Array(7)].map((_, i) => (
+                    <View
+                      key={i}
+                      style={[
+                        styles.streakDot,
+                        {
+                          backgroundColor:
+                            i < 5 ? (theme.shades.streak.text === '#FFFFFF' ? '#FBBF24' : theme.secondary) : 'rgba(255, 255, 255, 0.25)',
+                        },
+                      ]}
+                    />
+                  ))}
+                </View>
+                <ChevronRight size={11} color={theme.shades.streak.text} />
               </View>
             </View>
           </Pressable>
 
-          {/* Card 2: Chapter 1 (Lime/Driver themed) */}
+          {/* Card 2: Chapter 1 */}
           <Pressable
-            style={[styles.card, { backgroundColor: theme.shades.chapters.bg, borderColor: theme.shades.chapters.border }]}
+            style={styles.chaptersCard}
             onPress={() => onCardPress('Chapters')}
           >
             <View style={styles.cardHeaderRow}>
@@ -91,15 +94,18 @@ export function StatsGrid({
               <Text style={[styles.chapterSubtitle, { color: theme.shades.chapters.text, opacity: 0.85 }]} numberOfLines={1}>
                 {currentChapter}/{totalChapters} Chapters
               </Text>
-              <View style={[styles.progressBarBg, { backgroundColor: theme.shades.chapters.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
-                <View style={[styles.progressBarFill, { width: `${(currentChapter / totalChapters) * 100}%`, backgroundColor: theme.shades.chapters.text }]} />
+              <View style={styles.rowAlign}>
+                <View style={[styles.progressBarBg, { backgroundColor: theme.shades.chapters.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
+                  <View style={[styles.progressBarFill, { width: `${(currentChapter / totalChapters) * 100}%`, backgroundColor: theme.shades.chapters.text }]} />
+                </View>
+                <ChevronRight size={11} color={theme.shades.chapters.text} />
               </View>
             </View>
           </Pressable>
 
           {/* Card 3: Achievements */}
           <Pressable
-            style={[styles.card, { backgroundColor: theme.shades.achievements.bg, borderColor: theme.shades.achievements.border }]}
+            style={styles.achievementsCard}
             onPress={() => onCardPress('Achievements')}
           >
             <View style={styles.cardHeaderRow}>
@@ -107,8 +113,10 @@ export function StatsGrid({
               <Trophy size={16} color={theme.shades.achievements.text} />
             </View>
             <View style={styles.cardBottomSection}>
-              <Text style={[styles.statLabel, { color: theme.shades.achievements.text, opacity: 0.85 }]} numberOfLines={1}>ACHIEVEMENTS</Text>
-              <ChevronRight size={11} color={theme.shades.achievements.text} style={styles.bottomChevron} />
+              <View style={styles.rowAlign}>
+                <Text style={[styles.statLabel, { color: theme.shades.achievements.text, opacity: 0.85, marginTop: 0 }]} numberOfLines={1}>ACHIEVEMENTS</Text>
+                <ChevronRight size={11} color={theme.shades.achievements.text} />
+              </View>
             </View>
           </Pressable>
         </View>
@@ -120,7 +128,7 @@ export function StatsGrid({
         <View style={styles.column}>
           {/* Card 1: Total XP */}
           <Pressable
-            style={[styles.card, { backgroundColor: theme.shades.xp.bg, borderColor: theme.shades.xp.border }]}
+            style={styles.xpCard}
             onPress={() => onCardPress('XP')}
           >
             <View style={styles.cardHeaderRow}>
@@ -129,15 +137,18 @@ export function StatsGrid({
             </View>
             <View style={styles.cardBottomSection}>
               <Text style={[styles.statLabel, { color: theme.shades.xp.text, opacity: 0.85 }]} numberOfLines={1}>TOTAL XP</Text>
-              <View style={[styles.progressBarBg, { backgroundColor: theme.shades.xp.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
-                <View style={[styles.progressBarFill, { width: '80%', backgroundColor: theme.shades.xp.text }]} />
+              <View style={styles.rowAlign}>
+                <View style={[styles.progressBarBg, { backgroundColor: theme.shades.xp.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
+                  <View style={[styles.progressBarFill, { width: '80%', backgroundColor: theme.shades.xp.text }]} />
+                </View>
+                <ChevronRight size={11} color={theme.shades.xp.text} />
               </View>
             </View>
           </Pressable>
 
           {/* Card 2: Goals This Week */}
           <Pressable
-            style={[styles.card, { backgroundColor: theme.shades.goals.bg, borderColor: theme.shades.goals.border }]}
+            style={styles.goalsCard}
             onPress={() => onCardPress('Goals')}
           >
             <View style={styles.cardHeaderRow}>
@@ -148,27 +159,29 @@ export function StatsGrid({
             </View>
             <View style={styles.cardBottomSection}>
               <Text style={[styles.statLabel, { color: theme.shades.goals.text, opacity: 0.85 }]} numberOfLines={1}>GOALS THIS WEEK</Text>
-              <View style={styles.goalsBlocksRow}>
-                {[...Array(totalGoalsThisWeek)].map((_, i) => (
-                  <View
-                    key={i}
-                    style={[
-                      styles.goalBlock,
-                      {
-                         backgroundColor:
-                          i < goalsThisWeek ? theme.shades.goals.text : (theme.shades.goals.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.15)'),
-                      },
-                    ]}
-                  />
-                ))}
+              <View style={styles.rowAlign}>
+                <View style={styles.goalsBlocksRow}>
+                  {[...Array(totalGoalsThisWeek)].map((_, i) => (
+                    <View
+                      key={i}
+                      style={[
+                        styles.goalBlock,
+                        {
+                          backgroundColor:
+                            i < goalsThisWeek ? theme.shades.goals.text : (theme.shades.goals.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.15)'),
+                        },
+                      ]}
+                    />
+                  ))}
+                </View>
+                <ChevronRight size={11} color={theme.shades.goals.text} />
               </View>
-              <ChevronRight size={11} color={theme.shades.goals.text} style={styles.bottomChevron} />
             </View>
           </Pressable>
 
           {/* Card 3: Overall Progress */}
           <Pressable
-            style={[styles.card, { backgroundColor: theme.shades.progress.bg, borderColor: theme.shades.progress.border }]}
+            style={styles.progressCard}
             onPress={() => onCardPress('Progress')}
           >
             <View style={styles.cardHeaderRow}>
@@ -177,10 +190,12 @@ export function StatsGrid({
             </View>
             <View style={styles.cardBottomSection}>
               <Text style={[styles.statLabel, { color: theme.shades.progress.text, opacity: 0.85 }]} numberOfLines={1}>PROGRESS</Text>
-              <View style={[styles.progressBarBg, { backgroundColor: theme.shades.progress.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
-                <View style={[styles.progressBarFill, { width: `${overallProgress}%`, backgroundColor: theme.shades.progress.text }]} />
+              <View style={styles.rowAlign}>
+                <View style={[styles.progressBarBg, { backgroundColor: theme.shades.progress.text === '#FFFFFF' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)' }]}>
+                  <View style={[styles.progressBarFill, { width: `${overallProgress}%`, backgroundColor: theme.shades.progress.text }]} />
+                </View>
+                <ChevronRight size={11} color={theme.shades.progress.text} />
               </View>
-              <ChevronRight size={11} color={theme.shades.progress.text} style={styles.bottomChevron} />
             </View>
           </Pressable>
         </View>
@@ -207,7 +222,7 @@ const styles = StyleSheet.create({
     height: 230,
     borderRadius: 115,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#CEF932',
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
@@ -217,15 +232,15 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 100,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#CEF932',
     borderStyle: 'dashed',
     opacity: 0.5,
   },
   avatarImage: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: -72, // Sit taller and centered in spacer
-    width: 240,  // Proportional avatar scale
+    bottom: -72,
+    width: 240,
     height: 440,
     zIndex: 0,
   },
@@ -243,11 +258,11 @@ const styles = StyleSheet.create({
   centerSpace: {
     width: 175,
   },
-  card: {
+  streakCard: {
     width: '100%',
     height: 104,
     borderRadius: 10,
-    borderWidth: 2.5,
+    borderWidth: 1.5,
     padding: 10,
     position: 'relative',
     justifyContent: 'flex-start',
@@ -256,8 +271,93 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 10,
     elevation: 5,
-    marginBottom:20,
- 
+    marginBottom: 20,
+    backgroundColor: '#5D27B9',
+    borderColor: '#000000',
+  },
+  chaptersCard: {
+    width: '100%',
+    height: 104,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    padding: 10,
+    position: 'relative',
+    justifyContent: 'flex-start',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 5,
+    marginBottom: 20,
+    backgroundColor: '#4F46E5',
+    borderColor: '#000000',
+  },
+  achievementsCard: {
+    width: '100%',
+    height: 104,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    padding: 10,
+    position: 'relative',
+    justifyContent: 'flex-start',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 5,
+    marginBottom: 20,
+    backgroundColor: '#6B4EFF',
+    borderColor: '#000000',
+  },
+  xpCard: {
+    width: '100%',
+    height: 104,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    padding: 10,
+    position: 'relative',
+    justifyContent: 'flex-start',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 5,
+    marginBottom: 20,
+    backgroundColor: '#CEF932',
+    borderColor: '#000000',
+  },
+  goalsCard: {
+    width: '100%',
+    height: 104,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    padding: 10,
+    position: 'relative',
+    justifyContent: 'flex-start',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 5,
+    marginBottom: 20,
+    backgroundColor: '#ADDF00',
+    borderColor: '#000000',
+  },
+  progressCard: {
+    width: '100%',
+    height: 104,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    padding: 10,
+    position: 'relative',
+    justifyContent: 'flex-start',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 5,
+    marginBottom: 20,
+    backgroundColor: '#E1FF63',
     borderColor: '#000000',
   },
   cardBottomSection: {
@@ -285,20 +385,20 @@ const styles = StyleSheet.create({
   },
   chapterTitle: {
     fontFamily: 'SugarPeachy-Bold',
-    fontSize: 24, // Made font bolder and larger
+    fontSize: 24,
     color: '#FFFFFF',
     lineHeight: 20,
   },
   chapterSubtitle: {
-    fontFamily: 'Chillax-Bold', // Made font bold
-    fontSize: 9.5, // Match statLabel size
+    fontFamily: 'Chillax-Bold',
+    fontSize: 9.5,
     color: '#E2E8F0',
     marginTop: 0.5,
   },
   streakDotsRow: {
     flexDirection: 'row',
     gap: 2.5,
-    marginTop: 6,
+    marginTop: 0,
   },
   streakDot: {
     width: 6.5,
@@ -310,26 +410,28 @@ const styles = StyleSheet.create({
     borderRadius: 2.5,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     width: '80%',
-    marginTop: 6,
+    marginTop: 0,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
     borderRadius: 2.5,
   },
-
-  bottomChevron: {
-    alignSelf: 'flex-end',
-    marginTop: 2,
-  },
   goalsBlocksRow: {
     flexDirection: 'row',
     gap: 3,
-    marginTop: 6,
+    marginTop: 0,
   },
   goalBlock: {
     width: 8,
     height: 8,
     borderRadius: 2,
+  },
+  rowAlign: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 6,
   },
 });
